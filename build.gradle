@@ -16,6 +16,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web' //웹 스타터. 컴파일, 런타임 모두 사용
     developmentOnly 'org.springframework.boot:spring-boot-devtools' //개발 유용한 도구. 개발에만 사용
 
+    runtimeOnly 'com.h2database:h2'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+
     compileOnly 'org.projectlombok:lombok' //롬복 어노테이션 관련. 컴파일 타임에만 사용
     annotationProcessor 'org.projectlombok:lombok' //롬복 어노테이션 관련
 

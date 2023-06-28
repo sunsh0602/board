@@ -1,0 +1,19 @@
+<html>
+<div layout:fragment="content">
+  <h5>질문등록</h5>
+  <form th:action="@{/question/create}" th:object="${questionForm}" method="post">
+    <div role="alert" th:if="${#fields.hasAnyErrors()}">
+      <div th:each="err : ${#fields.allErrors()}" th:text="${err}" />
+    </div>
+    <div>
+      <label for="subject">제목</label>
+      <input type="text" name="subject" id="subject" th:value="${questionForm.subject}">
+    </div>
+    <div>
+      <label for="content">내용</label>
+      <textarea name="content" id="content" rows="10" th:text="${questionForm.content}"></textarea>
+    </div>
+    <input type="submit" value="저장하기">
+  </form>
+</div>
+</html>

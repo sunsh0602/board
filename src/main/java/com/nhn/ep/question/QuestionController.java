@@ -1,6 +1,8 @@
 package com.nhn.ep.question;
 
+import com.nhn.ep.answer.AnswerForm;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,22 +31,24 @@ public class QuestionController {
     }
 
     @GetMapping(value = "/question/detail/{id}")
-    public String detail(Model model, @PathVariable("id") Integer id) {
+    public String detail(Model model, @PathVariable("id") Integer id, AnswerForm answerForm) {
         Question question = this.questionService.getQuestion(id); //questionService 서비스의 getQuestion 호출
         model.addAttribute("question", question);
         return "question_detail";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/question/create")
     public String questionCreate(QuestionForm questionForm) {
         return "question_form"; // 질문 등록 폼으로 이동
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/question/create")
     public String questionCreate(@Valid QuestionForm questionForm, BindingResult bindingResult) {
-//        if (bindingResult.hasErrors()) {  //QuestionForm 기준에 에러 있을 경우
-//            return "question_form"; // 질문 등록 폼으로 이동
-//        }
+        if (bindingResult.hasErrors()) {  //QuestionForm 기준에 에러 있을 경우
+            return "question_form"; // 질문 등록 폼으로 이동
+        }
         this.questionService.create(questionForm.getSubject(), questionForm.getContent());
         return "redirect:/question/list";
     }

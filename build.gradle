@@ -16,6 +16,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web' //웹 스타터. 컴파일, 런타임 모두 사용
     developmentOnly 'org.springframework.boot:spring-boot-devtools' //개발 유용한 도구. 개발에만 사용
 
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+
 
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 

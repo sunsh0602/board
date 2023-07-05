@@ -1,4 +1,4 @@
-<html>
+<html layout:decorate="~{layout}">
 <div layout:fragment="content">
   <h5>질문등록</h5>
   <form th:action="@{/question/create}" th:object="${questionForm}" method="post">

@@ -1,6 +1,7 @@
 package com.nhn.ep.answer;
 
 import com.nhn.ep.question.Question;
+import com.nhn.ep.user.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,4 +23,8 @@ public class Answer {
 
     @ManyToOne  // N:1 관계.   답변 N개: 질문글 1개
     private Question question;
+
+    //작성자를 추가로 남기기 위해 추가한 필드
+    @ManyToOne  // N:1 관계.   답변 N개: 유저 1명
+    private User author;
 }

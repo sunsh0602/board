@@ -1,24 +1,73 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content">
 
-
-<table>
-  <thead>
-  <tr>
-    <th>제목</th>
-    <th>작성일시</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr th:each="question : ${questionList}">
-<!--    <td th:text="${question.subject}"></td>-->
-    <td>
-      <a th:href="@{|/question/detail/${question.id}|}" th:text="${question.subject}"></a>
-    </td>
-    <td th:text="${question.createDate}"></td>
-  </tr>
-  </tbody>
-</table>
-<a th:href="@{/question/create}" >질문 등록하기</a>
+    <table>
+        <thead>
+        <tr>
+            <th>번호</th>
+            <th style="width:50%">제목</th>
+            <th>글쓴이</th>
+            <th>작성일시</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- <tr th:each="question : ${questionList}">-->
+        <tr th:each="question : ${paging}">
+            <!--    <td th:text="${question.subject}"></td>-->
+            <!-- 글 번호 추가 -->
+            <td th:text="${question.id}"></td>
+            <td>
+                <a th:href="@{|/question/detail/${question.id}|}" th:text="${question.subject}"></a>
+                <!-- 답변 개수 출력 -->
+                <span th:if="${#lists.size(question.answerList) > 0}"
+                      th:text="${#lists.size(question.answerList)}">
+                    </span>
+            </td>
+            <!-- 저자 부분 추가 -->
+            <td>
+                <span th:if="${question.author != null}" th:text="${question.author.username}"></span>
+            </td>
+            <td th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <!-- 페이징처리 시작 -->
+    <div th:if="${!paging.isEmpty()}">
+        <span>
+            <a th:href="@{|?page=0|}">
+                <span>처음</span>
+            </a>
+        </span>
+        <span th:class="${paging.hasPrevious} ? '' : 'disabled'"> <!-- 이전 페이지 링크 걸기 -->
+            <a th:if="${paging.hasPrevious}" th:href="@{|?page=${paging.number-1}|}">  <!-- 이전 페이지 있으면 링크 -->
+                <span>이전</span>
+            </a>
+            <span th:unless="${paging.hasPrevious}"> <!-- 이전 페이지 없으면 링크 없이 글씨만 -->
+                <span>이전</span>
+            </span>
+        </span>
+        <!--1페이지부터 시작해서 페이지 처리 -->
+        <!-- 페이지 앞뒤에 +- 5페이지만 보이게 설정 -->
+        <span th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+              th:if="${page >= paging.number-5 and page <= paging.number+5}"
+              th:style="${page == paging.number} ? 'font-weight:bold' : ''">
+                    <a th:text="${page}" th:href="@{|?page=${page}|}"></a>
+                </span>
+        <span th:classappend="${!paging.hasNext} ? 'disabled'"> <!-- 다음 페이지 링크 걸기 -->
+            <a th:if="${paging.hasNext}" th:href="@{|?page=${paging.number+1}|}">  <!-- 다음 페이지 있으면 링크 -->
+                <span>다음</span>
+            </a>
+            <span th:unless="${paging.hasNext}"> <!-- 다음 페이지 없으면 링크 없이 글씨만 -->
+                <span>다음</span>
+            </span>
+        </span>
+        <span>
+            <a th:href="@{|?page=${paging.totalPages-1}|}">
+                <span>마지막</span>
+            </a>
+        </span>
+    </div>
+    <!-- 페이징처리 끝 -->
+    <a th:href="@{/question/create}">질문 등록하기</a>
 </div>
 </html>

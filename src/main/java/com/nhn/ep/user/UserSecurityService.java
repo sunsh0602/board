@@ -1,6 +1,7 @@
 package com.nhn.ep.user;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class UserSecurityService implements UserDetailsService {
@@ -37,6 +39,8 @@ public class UserSecurityService implements UserDetailsService {
         Optional<User> findUser = this.userRepository.findByUsername(username);
         if (findUser.isEmpty()) {
             //username이 DB에 없는 경우 에러 발생
+
+            log.error("사용자를 찾을 수 없습니다. 요청된 아이디: " + username);
             throw new UsernameNotFoundException("사용자를 찾을수 없습니다.");
         }
 

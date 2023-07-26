@@ -4,6 +4,7 @@ import com.nhn.ep.answer.AnswerForm;
 import com.nhn.ep.user.User;
 import com.nhn.ep.user.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor //롬복 DI 주입. questionRepository를 주입한다.
 @Controller
 public class QuestionController {
@@ -40,6 +42,10 @@ public class QuestionController {
     //페이징 처리
     @GetMapping("/question/list")
     public String list(Model model, @RequestParam(value="page", defaultValue="0") int page) {
+
+        log.info("/question/list 페이지 접속하셨습니다.");
+        log.debug("/question/list 페이지 debug 로그 접속하셨습니다.");
+
         Page<Question> paging = this.questionService.getPageList(page); //pageList 서비스 호출
         model.addAttribute("paging", paging); //paging으로 모델 설정
         return "question_list"; // 질문 리스트 페이지 출력

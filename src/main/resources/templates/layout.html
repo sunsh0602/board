@@ -5,24 +5,52 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Board</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
+    <!-- Bootstrap JS -->
+    <script th:src="@{/bootstrap.min.js}"></script>
+
 </head>
 <body>
-<nav>
-    <div>
-        <a href="/">클라우드운영팀</a>
-        <div>
-            <ul>
-                <li>
-                    <a sec:authorize="isAnonymous()" th:href="@{/user/login}">로그인</a>
-                    <a sec:authorize="isAuthenticated()" th:href="@{/user/logout}">로그아웃</a>
+<!--<nav>-->
+<!--    <div>-->
+<!--        <a href="/">클라우드운영팀</a>-->
+<!--        <div>-->
+<!--            <ul>-->
+<!--                <li>-->
+<!--                    <a sec:authorize="isAnonymous()" th:href="@{/user/login}">로그인</a>-->
+<!--                    <a sec:authorize="isAuthenticated()" th:href="@{/user/logout}">로그아웃</a>-->
+<!--                </li>-->
+<!--                <li>-->
+<!--                    <a th:href="@{/user/signup}">회원가입</a>-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</nav>-->
+<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">EP 클라우드운영팀</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/user/login}">로그인</a>
+                    <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/user/logout}">로그아웃</a>
                 </li>
-                <li>
-                    <a th:href="@{/user/signup}">회원가입</a>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/user/signup}">회원가입</a>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
+
+
 <!-- 기본 템플릿 안에 삽입될 내용 Start -->
 <th:block layout:fragment="content"></th:block>
 <!-- 기본 템플릿 안에 삽입될 내용 End -->

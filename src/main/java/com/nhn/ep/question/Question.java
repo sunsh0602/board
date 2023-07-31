@@ -32,4 +32,7 @@ public class Question {
     //작성자를 추가로 남기기 위해 추가한 필드
     @ManyToOne  // N:1 관계.   답변 N개: 유저 1명
     private User author;
+
+    private LocalDateTime modifyDate;
+
 }

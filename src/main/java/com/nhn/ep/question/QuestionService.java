@@ -26,7 +26,7 @@ public class QuestionService {
     }
 
     //질문글 페이지를 리턴한다
-    public Page<Question> getPageList(int page){
+    public Page<Question> getPageList(int page, String keyword){
 
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate")); //글 작성 날짜 역순으로 정렬. 최신 글부터 보이게
@@ -34,11 +34,17 @@ public class QuestionService {
         //Pageable 객체로 검색 조건을 정의한다.
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts)); // 각 페이지당 글은 10개씩, 정렬 조건
 
-        Page<Question> pages = this.questionRepository.findAll(pageable); //page를 리턴하는 repository 메소드 호출
+//        Page<Question> pages = this.questionRepository.findAll(pageable); //page를 리턴하는 repository 메소드 호출
+        Page<Question> pages = this.questionRepository.findAllByKeyword(keyword, pageable);
         return pages;
     }
 
-
+    public void modify(Question question, String subject, String content) {
+        question.setSubject(subject);
+        question.setContent(content);
+        question.setModifyDate(LocalDateTime.now());
+        this.questionRepository.save(question);
+    }
     public Question getQuestion(Integer id) {
         Optional<Question> question = this.questionRepository.findById(id);
         if (question.isPresent()) {
@@ -58,6 +64,10 @@ public class QuestionService {
         //작성자를 저장하기 위해 추가
         q.setAuthor(author);
         this.questionRepository.save(q);
+    }
+
+    public void delete(Question question) {
+        this.questionRepository.delete(question);
     }
 
     // 질문을 DB에 저장한다.

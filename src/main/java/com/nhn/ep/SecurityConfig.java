@@ -23,8 +23,8 @@ public class SecurityConfig {
                         // 전체 페이지 접근 허용
                         new AntPathRequestMatcher("/**")).permitAll()
                 .and()
-
-
+                .csrf().ignoringRequestMatchers(new AntPathRequestMatcher("/project/**"))
+                .and()
                 // h2 db 페이지. csrf 검증 무시
                 .csrf().ignoringRequestMatchers(new AntPathRequestMatcher("/h2/**"))
                 .and()

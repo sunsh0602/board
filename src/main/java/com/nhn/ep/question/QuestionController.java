@@ -3,23 +3,31 @@ package com.nhn.ep.question;
 import com.nhn.ep.answer.AnswerForm;
 import com.nhn.ep.user.User;
 import com.nhn.ep.user.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor //롬복 DI 주입. questionRepository를 주입한다.
@@ -126,4 +134,29 @@ public class QuestionController {
         this.questionService.create(questionForm.getSubject(), questionForm.getContent(), author);
         return "redirect:/question/list";
     }
+
+    @Operation(summary = "질문 등록", description = "질문 등록을 처리하는 API 입니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Created"),
+            @ApiResponse(responseCode = "400", description = "Bad Request"),
+            @ApiResponse(responseCode = "404", description = "Not Found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error")
+    })
+    @ResponseBody
+    @PreAuthorize("permitAll()")
+    @PostMapping("/project/v1/cloud/posts")
+    public ResponseEntity<?> questionCreateApi(@Valid @RequestBody QuestionForm questionForm, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {  //QuestionForm 기준에 에러 있을 경우
+            log.error(bindingResult.getFieldErrors().stream().map(Object::toString).collect(Collectors.joining(", ")));
+
+            return new ResponseEntity<>(bindingResult.getFieldErrors().stream()
+                            .map(Object::toString)
+                            .collect(Collectors.joining(", ")), HttpStatus.BAD_REQUEST);
+        }
+        this.questionService.create(questionForm.getSubject(), questionForm.getContent());
+        return new ResponseEntity<>("Created", HttpStatus.CREATED);
+    }
+
+
 }
